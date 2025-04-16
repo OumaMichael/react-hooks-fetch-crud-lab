@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 function NewQuestionForm({ onAddQuestion }) {
   const [prompt, setPrompt] = useState("");
-  const [answers, setAnswers] = useState(["", "", "", ""]);
-  const [correctIndex, setCorrectIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [correctIndex, setCorrectIndex] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,10 +21,14 @@ function NewQuestionForm({ onAddQuestion }) {
       .then((data) => {
         onAddQuestion(data);
         setPrompt("");
-        setAnswers(["", "", "", ""]);
-        setCorrectIndex(0);
+        setAnswers([]);
+        setCorrectIndex(null);
       })
       .catch((error) => console.log(error));
+  };
+
+  const handleAddAnswer = () => {
+    setAnswers([...answers, ""]);
   };
 
   const handleAnswerChange = (event, index) => {
@@ -56,12 +60,19 @@ function NewQuestionForm({ onAddQuestion }) {
         </label>
       ))}
       <br />
+      <button type="button" onClick={handleAddAnswer}>
+        Add Answer
+      </button>
+      <br />
       <label>
         Correct Answer:
         <select
-          value={correctIndex}
+          value={correctIndex === null ? "" : correctIndex}
           onChange={(event) => setCorrectIndex(parseInt(event.target.value))}
         >
+          <option value="" disabled>
+            Select an answer
+          </option>
           {answers.map((answer, index) => (
             <option key={index} value={index}>
               {answer}
@@ -70,7 +81,7 @@ function NewQuestionForm({ onAddQuestion }) {
         </select>
       </label>
       <br />
-      <button type="submit">Add Question</button>
+      <button type="submit">Submit</button>
     </form>
   );
 }
