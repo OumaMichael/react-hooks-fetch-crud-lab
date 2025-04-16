@@ -20,6 +20,7 @@ function QuestionForm(props) {
   function handleSubmit(event) {
     event.preventDefault();
     console.log(formData);
+    // You will handle the actual submission in the NewQuestionForm component
   }
 
   return (
